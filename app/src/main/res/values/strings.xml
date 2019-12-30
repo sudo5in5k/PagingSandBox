@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PagingSandBox</string>
+    <string name="is_loading">isLoading</string>
+</resources>
