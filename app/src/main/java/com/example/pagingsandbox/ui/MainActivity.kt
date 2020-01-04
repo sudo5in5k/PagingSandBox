@@ -13,8 +13,8 @@ import com.example.pagingsandbox.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityMainBinding
-    lateinit var adapter: ItemAdapter
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: ItemAdapter
     private val viewModel: StackOverFlowViewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(StackOverFlowViewModel::class.java)
     }
