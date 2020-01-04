@@ -13,6 +13,7 @@ class StackOverFlowViewModel : ViewModel() {
 
     val query = MutableLiveData<String>("")
 
+    // TODO 再読み込みではなくRoomにキャッシュ
     val itemPagedList: LiveData<PagedList<Item>> = Transformations.switchMap(query) {
         if (it.isNullOrEmpty()) {
             ItemRepository().getItems()
