@@ -9,10 +9,11 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pagingsandbox.BR
-import com.example.pagingsandbox.databinding.ItemBinding
 import com.example.pagingsandbox.data.remote.Item
+import com.example.pagingsandbox.databinding.ItemBinding
 
 class ItemAdapter : PagedListAdapter<Item, ItemAdapter.ItemViewHolder>(DIFF_CALLBACK) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ItemBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -26,7 +27,6 @@ class ItemAdapter : PagedListAdapter<Item, ItemAdapter.ItemViewHolder>(DIFF_CALL
         holder.binding?.setVariable(BR.item, getItem(position))
         holder.binding?.executePendingBindings()
     }
-
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding: ViewDataBinding? = DataBindingUtil.bind(itemView)
