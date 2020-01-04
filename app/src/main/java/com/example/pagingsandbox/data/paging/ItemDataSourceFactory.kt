@@ -1,9 +1,9 @@
-package com.example.pagingsandbox.repository
+package com.example.pagingsandbox.data.paging
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
-import com.example.pagingsandbox.repository.remote.Item
+import com.example.pagingsandbox.data.remote.Item
 
 class ItemDataSourceFactory : DataSource.Factory<Int, Item>() {
 

@@ -1,4 +1,4 @@
-package com.example.pagingsandbox.repository.remote
+package com.example.pagingsandbox.data.remote
 
 data class StackOverFlowApiEntity(
     val items: List<Item>,

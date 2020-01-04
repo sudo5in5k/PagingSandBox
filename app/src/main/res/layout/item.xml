@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.example.pagingsandbox.repository.remote.Item" />
+            type="com.example.pagingsandbox.data.remote.Item" />
     </data>
 
     <androidx.cardview.widget.CardView

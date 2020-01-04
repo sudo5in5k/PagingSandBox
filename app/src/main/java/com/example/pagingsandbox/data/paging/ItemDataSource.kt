@@ -1,11 +1,11 @@
-package com.example.pagingsandbox.repository
+package com.example.pagingsandbox.data.paging
 
 import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import com.example.pagingsandbox.BuildConfig
-import com.example.pagingsandbox.repository.remote.Item
-import com.example.pagingsandbox.repository.remote.StackOverFlowApiEntity
-import com.example.pagingsandbox.repository.remote.StackOverFlowService
+import com.example.pagingsandbox.data.remote.Item
+import com.example.pagingsandbox.data.remote.StackOverFlowApiEntity
+import com.example.pagingsandbox.data.remote.StackOverFlowService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +15,11 @@ class ItemDataSource : PageKeyedDataSource<Int, Item>() {
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, Item>
     ) {
-        StackOverFlowService().getAnswers(FIRST_PAGE, PAGE_SIZE, SITE_NAME)
+        StackOverFlowService().getAnswers(
+            FIRST_PAGE,
+            PAGE_SIZE,
+            SITE_NAME
+        )
             .enqueue(object : Callback<StackOverFlowApiEntity> {
                 override fun onFailure(call: Call<StackOverFlowApiEntity>, t: Throwable) {
                     if (BuildConfig.DEBUG) {
@@ -35,7 +39,10 @@ class ItemDataSource : PageKeyedDataSource<Int, Item>() {
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Item>) {
-        StackOverFlowService().getAnswers(params.key, PAGE_SIZE, SITE_NAME)
+        StackOverFlowService().getAnswers(params.key,
+            PAGE_SIZE,
+            SITE_NAME
+        )
             .enqueue(object : Callback<StackOverFlowApiEntity> {
                 override fun onFailure(call: Call<StackOverFlowApiEntity>, t: Throwable) {
                     if (BuildConfig.DEBUG) {
@@ -57,7 +64,10 @@ class ItemDataSource : PageKeyedDataSource<Int, Item>() {
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Item>) {
-        StackOverFlowService().getAnswers(params.key, PAGE_SIZE, SITE_NAME)
+        StackOverFlowService().getAnswers(params.key,
+            PAGE_SIZE,
+            SITE_NAME
+        )
             .enqueue(object : Callback<StackOverFlowApiEntity> {
                 override fun onFailure(call: Call<StackOverFlowApiEntity>, t: Throwable) {
                     if (BuildConfig.DEBUG) {

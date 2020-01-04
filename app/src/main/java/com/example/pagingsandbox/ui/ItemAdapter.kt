@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pagingsandbox.BR
 import com.example.pagingsandbox.databinding.ItemBinding
-import com.example.pagingsandbox.repository.remote.Item
+import com.example.pagingsandbox.data.remote.Item
 
 class ItemAdapter : PagedListAdapter<Item, ItemAdapter.ItemViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
