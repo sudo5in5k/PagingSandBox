@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         binding.recycler.adapter = adapter
         binding.isLoading = true
 
-        viewModel.itemPagedList?.observe(this, Observer {
+        viewModel.itemPagedList.observe(this, Observer {
             if (it == null) {
                 Log.d("debug", "data is null")
             } else {

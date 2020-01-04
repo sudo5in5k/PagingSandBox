@@ -7,7 +7,7 @@ import com.example.pagingsandbox.data.remote.Item
 
 class ItemDataSourceFactory : DataSource.Factory<Int, Item>() {
 
-    val itemLiveDataSource = MutableLiveData<PageKeyedDataSource<Int, Item>>()
+    private val itemLiveDataSource = MutableLiveData<PageKeyedDataSource<Int, Item>>()
 
     override fun create(): DataSource<Int, Item> {
         val itemDataSource = ItemDataSource()
