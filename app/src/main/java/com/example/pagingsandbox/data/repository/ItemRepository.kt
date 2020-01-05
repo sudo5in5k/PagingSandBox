@@ -4,10 +4,15 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.pagingsandbox.data.paging.ItemDataSource
 import com.example.pagingsandbox.data.paging.ItemDataSourceFactory
+import com.example.pagingsandbox.data.remote.StackOverFlowApi
+import com.example.pagingsandbox.data.remote.StackOverFlowService
+import kotlinx.coroutines.CoroutineScope
 
-class ItemRepository {
+class ItemRepository(private val scope: CoroutineScope) {
 
-    private val itemDataSourceFactory = ItemDataSourceFactory()
+    private val api: StackOverFlowApi by lazy { StackOverFlowService() }
+
+    private val itemDataSourceFactory = ItemDataSourceFactory("", api, scope)
     private val config = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
         .setInitialLoadSizeHint(20)
@@ -17,5 +22,5 @@ class ItemRepository {
         .build()
 
     fun getItemsWithFilter(query: String) =
-        LivePagedListBuilder(ItemDataSourceFactory(query), config).build()
+        LivePagedListBuilder(ItemDataSourceFactory(query, api, scope), config).build()
 }

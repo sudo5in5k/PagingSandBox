@@ -2,99 +2,47 @@ package com.example.pagingsandbox.data.paging
 
 import android.util.Log
 import androidx.paging.PageKeyedDataSource
-import com.example.pagingsandbox.BuildConfig
 import com.example.pagingsandbox.data.remote.Item
+import com.example.pagingsandbox.data.remote.StackOverFlowApi
 import com.example.pagingsandbox.data.remote.StackOverFlowApiEntity
 import com.example.pagingsandbox.data.remote.StackOverFlowService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.util.*
 
-class ItemDataSource(val query: String = "") : PageKeyedDataSource<Int, Item>() {
+class ItemDataSource(
+    private val query: String = "",
+    private val api: StackOverFlowApi,
+    private val scope: CoroutineScope
+) : PageKeyedDataSource<Int, Item>() {
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, Item>
     ) {
-        StackOverFlowService().getAnswers(
-            FIRST_PAGE,
-            PAGE_SIZE,
-            SITE_NAME
-        )
-            .enqueue(object : Callback<StackOverFlowApiEntity> {
-                override fun onFailure(call: Call<StackOverFlowApiEntity>, t: Throwable) {
-                    if (BuildConfig.DEBUG) {
-                        Log.d("debug", t.toString())
-                    }
-                }
-
-                override fun onResponse(
-                    call: Call<StackOverFlowApiEntity>,
-                    response: Response<StackOverFlowApiEntity>
-                ) {
-                    response.body()?.let {
-                        callback.onResult(filteredByQuery(query, it.items), null, FIRST_PAGE + 1)
-                    }
-                }
-            })
+        scope.launch {
+            getAnswer(FIRST_PAGE) {
+                callback.onResult(filteredByQuery(query, it.items), null, FIRST_PAGE + 1)
+            }
+        }
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Item>) {
-        StackOverFlowService().getAnswers(
-            params.key,
-            PAGE_SIZE,
-            SITE_NAME
-        )
-            .enqueue(object : Callback<StackOverFlowApiEntity> {
-                override fun onFailure(call: Call<StackOverFlowApiEntity>, t: Throwable) {
-                    if (BuildConfig.DEBUG) {
-                        Log.d("debug", t.toString())
-                    }
-                }
-
-                override fun onResponse(
-                    call: Call<StackOverFlowApiEntity>,
-                    response: Response<StackOverFlowApiEntity>
-                ) {
-                    val body = response.body()
-                    val key = if (body?.has_more == true) params.key + 1 else null
-                    body?.let {
-                        callback.onResult(filteredByQuery(query, it.items), key)
-                    }
-                }
-            })
+        scope.launch {
+            getAnswer(params.key) {
+                val key = if (it.has_more) params.key + 1 else null
+                callback.onResult(filteredByQuery(query, it.items), key)
+            }
+        }
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Item>) {
-        StackOverFlowService().getAnswers(
-            params.key,
-            PAGE_SIZE,
-            SITE_NAME
-        )
-            .enqueue(object : Callback<StackOverFlowApiEntity> {
-                override fun onFailure(call: Call<StackOverFlowApiEntity>, t: Throwable) {
-                    if (BuildConfig.DEBUG) {
-                        Log.d("debug", t.toString())
-                    }
-                }
-
-                override fun onResponse(
-                    call: Call<StackOverFlowApiEntity>,
-                    response: Response<StackOverFlowApiEntity>
-                ) {
-                    response.raw().body().use { responseBody ->
-                        if (response.isSuccessful) {
-                            val key = if (params.key > 1) params.key - 1 else null
-                            response.body()?.let {
-                                callback.onResult(filteredByQuery(query, it.items), key)
-                            }
-                        } else {
-                            responseBody?.close()
-                        }
-                    }
-                }
-            })
+        scope.launch {
+            getAnswer(params.key) {
+                val key = if (params.key > 1) params.key - 1 else null
+                callback.onResult(filteredByQuery(query, it.items), key)
+            }
+        }
     }
 
     private fun filteredByQuery(query: String, items: List<Item>): List<Item> {
@@ -108,6 +56,21 @@ class ItemDataSource(val query: String = "") : PageKeyedDataSource<Int, Item>() 
         }
         Log.d("debug", "filtered!: ${filteredItems.size}")
         return filteredItems
+    }
+
+    private suspend fun getAnswer(page: Int, callback: (entity: StackOverFlowApiEntity) -> Unit) {
+        try {
+            val response = api.getAnswers(page, PAGE_SIZE, SITE_NAME)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    callback(it)
+                }
+            } else {
+                Log.d("debug", "Response Error: ${response.errorBody()?.string()}")
+            }
+        } catch (e: Exception) {
+            Log.d("debug", "Response Exception: ${e.message}")
+        }
     }
 
     companion object {
