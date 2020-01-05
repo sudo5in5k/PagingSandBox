@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             try {
-                binding.isLoading = true
+                binding.isLoading = false
                 adapter.submitList(it)
                 Handler().postDelayed({
                     binding.isLoading = false
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
             setOnCloseListener {
-                viewModel.filtering().filter("")
+                clearFocus()
                 false
             }
         }
