@@ -67,7 +67,7 @@ class ItemDataSource(
             } else {
                 when (response.code()) {
                     400 -> Log.d("debug", "Client Error! Request to: ${response.raw()}")
-                    504 -> Log.d("debug", "Server Error for Many Access")
+                    502 -> Log.d("debug", "Server Error for Many Access")
                     else -> Log.d("debug", "Error! Error code: ${response.code()}")
                 }
             }
