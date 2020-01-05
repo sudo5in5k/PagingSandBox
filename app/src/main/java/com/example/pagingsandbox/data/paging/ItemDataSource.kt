@@ -5,7 +5,6 @@ import androidx.paging.PageKeyedDataSource
 import com.example.pagingsandbox.data.remote.Item
 import com.example.pagingsandbox.data.remote.StackOverFlowApi
 import com.example.pagingsandbox.data.remote.StackOverFlowApiEntity
-import com.example.pagingsandbox.data.remote.StackOverFlowService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*

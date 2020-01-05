@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ItemAdapter
     private val viewModel: StackOverFlowViewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(StackOverFlowViewModel::class.java)
+        ViewModelProvider.AndroidViewModelFactory(this.application)
+            .create(StackOverFlowViewModel::class.java)
     }
 
     private lateinit var searchView: SearchView
