@@ -23,8 +23,7 @@ class ItemRepository(
         .setInitialLoadSizeHint(20)
         .setPageSize(ItemDataSource.PAGE_SIZE).build()
 
-    fun getItems() = LivePagedListBuilder(itemDataSourceFactory, config)
-        .build()
+    fun getItems() = LivePagedListBuilder(itemDataSourceFactory, config).build()
 
     fun getItemsWithFilter(query: String) =
         LivePagedListBuilder(ItemDataSourceFactory(query, api, scope), config).build()

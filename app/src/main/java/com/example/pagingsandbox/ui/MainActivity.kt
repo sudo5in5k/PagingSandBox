@@ -7,7 +7,6 @@ import android.os.Handler
 import android.text.InputType
 import android.util.Log
 import android.view.Menu
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
@@ -16,9 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pagingsandbox.R
 import com.example.pagingsandbox.databinding.ActivityMainBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,18 +38,25 @@ class MainActivity : AppCompatActivity() {
         binding.recycler.adapter = adapter
         binding.isLoading = true
 
+        swipe.setOnRefreshListener {
+            swipe.isRefreshing = true
+            viewModel.refresh()
+        }
+
         viewModel.itemPagedList.observe(this, Observer {
             if (it == null) {
                 Log.d("debug", "data is null")
+                swipe.isRefreshing = false
                 return@Observer
             }
 
             try {
+                binding.isLoading = true
                 adapter.submitList(it)
-                binding.isLoading = false
                 Handler().postDelayed({
                     binding.isLoading = false
-                }, 4000L)
+                }, 2000L)
+                swipe.isRefreshing = false
             } catch (e: Exception) {
                 Log.d("debug", "${e.message}")
             }

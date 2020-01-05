@@ -72,4 +72,8 @@ dependencies {
     // Paging
     def paging_ver = "2.1.1"
     implementation "androidx.paging:paging-runtime:$paging_ver"
+
+    // SwipeRefresh
+    def swipe_ver = "1.0.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipe_ver"
 }

@@ -12,12 +12,16 @@ class StackOverFlowViewModel(private val app: Application) : AndroidViewModel(ap
     val query = MutableLiveData<String>("")
 
     // TODO 再読み込みではなくRoomにキャッシュ
-    val itemPagedList: LiveData<PagedList<Item>> = Transformations.switchMap(query) {
+    var itemPagedList: MutableLiveData<PagedList<Item>> = Transformations.switchMap(query) {
         if (it.isNullOrEmpty()) {
             ItemRepository(app.applicationContext, viewModelScope).getItems()
         } else {
             ItemRepository(app.applicationContext, viewModelScope, true).getItemsWithFilter(it)
         }
+    } as MutableLiveData<PagedList<Item>>
+
+    fun refresh() {
+        itemPagedList.postValue(itemPagedList.value)
     }
 
     @Suppress("UNCHECKED_CAST")
