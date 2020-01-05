@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ItemAdapter
     private val viewModel: StackOverFlowViewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(StackOverFlowViewModel::class.java)
+        ViewModelProvider.AndroidViewModelFactory(this.application)
+            .create(StackOverFlowViewModel::class.java)
     }
 
     private lateinit var searchView: SearchView
@@ -72,12 +73,12 @@ class MainActivity : AppCompatActivity() {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    viewModel.filtering().filter(query)
                     clearFocus()
                     return false
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    Log.d("debug", "onQueryTextChange")
                     viewModel.filtering().filter(query)
                     return false
                 }
