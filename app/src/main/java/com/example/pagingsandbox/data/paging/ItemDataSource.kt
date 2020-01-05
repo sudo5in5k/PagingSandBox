@@ -44,28 +44,32 @@ class ItemDataSource(
         }
     }
 
-    private fun filteredByQuery(query: String, items: List<Item>): List<Item> {
-        val filteredItems = if (query.isEmpty() || query.isBlank()) {
+    private fun filteredByQuery(query: String, items: List<Item>) =
+        if (query.isEmpty() || query.isBlank()) {
             items
         } else {
             items.filter { it.owner.display_name.toLowerCase(Locale.US).contains(query) }
         }
-        if (filteredItems.isNullOrEmpty()) {
-            Log.d("debug", "no filtered match!")
-        }
-        Log.d("debug", "filtered!: ${filteredItems.size}")
-        return filteredItems
-    }
 
+    /**
+     * @see [ErrorCode](https://api.stackexchange.com/docs/error-handling)
+     */
     private suspend fun getAnswer(page: Int, callback: (entity: StackOverFlowApiEntity) -> Unit) {
         try {
             val response = api.getAnswers(page, PAGE_SIZE, SITE_NAME)
+            if (response.raw().cacheResponse() != null) {
+                Log.d("debug", "cache remain")
+            }
             if (response.isSuccessful) {
                 response.body()?.let {
                     callback(it)
                 }
             } else {
-                Log.d("debug", "Response Error: ${response.errorBody()?.string()}")
+                when (response.code()) {
+                    400 -> Log.d("debug", "Client Error! Request to: ${response.raw()}")
+                    504 -> Log.d("debug", "Server Error for Many Access")
+                    else -> Log.d("debug", "Error! Error code: ${response.code()}")
+                }
             }
         } catch (e: Exception) {
             Log.d("debug", "Response Exception: ${e.message}")

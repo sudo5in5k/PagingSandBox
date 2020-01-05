@@ -73,12 +73,12 @@ class MainActivity : AppCompatActivity() {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    viewModel.filtering().filter(query)
                     clearFocus()
                     return false
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    Log.d("debug", "onQueryTextChange")
                     viewModel.filtering().filter(query)
                     return false
                 }

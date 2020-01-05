@@ -9,9 +9,13 @@ import com.example.pagingsandbox.data.remote.StackOverFlowApi
 import com.example.pagingsandbox.data.remote.StackOverFlowService
 import kotlinx.coroutines.CoroutineScope
 
-class ItemRepository(private val context: Context, private val scope: CoroutineScope) {
+class ItemRepository(
+    private val context: Context,
+    private val scope: CoroutineScope,
+    private val useCache: Boolean = false
+) {
 
-    private val api: StackOverFlowApi by lazy { StackOverFlowService(context) }
+    private val api: StackOverFlowApi by lazy { StackOverFlowService(context, useCache) }
 
     private val itemDataSourceFactory = ItemDataSourceFactory("", api, scope)
     private val config = PagedList.Config.Builder()

@@ -10,19 +10,13 @@ import com.example.pagingsandbox.data.repository.ItemRepository
 class StackOverFlowViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val query = MutableLiveData<String>("")
-    private val repository: ItemRepository by lazy {
-        ItemRepository(
-            app.applicationContext,
-            viewModelScope
-        )
-    }
 
     // TODO 再読み込みではなくRoomにキャッシュ
     val itemPagedList: LiveData<PagedList<Item>> = Transformations.switchMap(query) {
         if (it.isNullOrEmpty()) {
-            repository.getItems()
+            ItemRepository(app.applicationContext, viewModelScope).getItems()
         } else {
-            repository.getItemsWithFilter(it)
+            ItemRepository(app.applicationContext, viewModelScope, true).getItemsWithFilter(it)
         }
     }
 
