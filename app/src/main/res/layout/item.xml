@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="item"
-            type="com.example.pagingsandbox.data.remote.Item" />
+            name="entity"
+            type="com.example.pagingsandbox.data.entity.QiitaUserEntity" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="fitCenter"
-                app:loadImageUrl="@{item.owner.profile_image}"
+                app:loadImageUrl="@{entity.profileImageUrl}"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:maxLines="2"
-                android:text="@{item.owner.display_name}"
+                android:text="@{entity.id}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorPrimary" />
 

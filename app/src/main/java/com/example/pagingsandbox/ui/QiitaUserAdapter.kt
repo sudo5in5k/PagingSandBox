@@ -5,14 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pagingsandbox.BR
-import com.example.pagingsandbox.data.remote.Item
+import com.example.pagingsandbox.data.entity.QiitaUserEntity
 import com.example.pagingsandbox.databinding.ItemBinding
 
-class ItemAdapter : PagedListAdapter<Item, ItemAdapter.ItemViewHolder>(DIFF_CALLBACK) {
+class QiitaUserAdapter : PagingDataAdapter<QiitaUserEntity, QiitaUserAdapter.ItemViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ItemBinding.inflate(
@@ -24,7 +24,7 @@ class ItemAdapter : PagedListAdapter<Item, ItemAdapter.ItemViewHolder>(DIFF_CALL
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.binding?.setVariable(BR.item, getItem(position))
+        holder.binding?.setVariable(BR.entity, getItem(position))
         holder.binding?.executePendingBindings()
     }
 
@@ -33,12 +33,12 @@ class ItemAdapter : PagedListAdapter<Item, ItemAdapter.ItemViewHolder>(DIFF_CALL
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Item>() {
-            override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-                return oldItem.question_id == newItem.question_id
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<QiitaUserEntity>() {
+            override fun areItemsTheSame(oldItem: QiitaUserEntity, newItem: QiitaUserEntity): Boolean {
+                return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            override fun areContentsTheSame(oldItem: QiitaUserEntity, newItem: QiitaUserEntity): Boolean {
                 return oldItem == newItem
             }
         }
