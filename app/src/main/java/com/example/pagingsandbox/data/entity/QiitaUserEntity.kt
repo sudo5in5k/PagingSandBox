@@ -1,15 +1,15 @@
 package com.example.pagingsandbox.data.entity
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import java.io.Serializable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class QiitaUserEntity(
     val description: String?,
-    @Json(name = "profile_image_url")
+    @SerialName("profile_image_url")
     val profileImageUrl: String,
     val id: String,
-    @Json(name = "items_count")
-    val itemsCount: Int?
-) : Serializable
+    @SerialName("items_count")
+    val itemsCount: Int?,
+
+)
