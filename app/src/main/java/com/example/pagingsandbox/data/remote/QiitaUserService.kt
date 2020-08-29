@@ -1,18 +1,19 @@
 package com.example.pagingsandbox.data.remote
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 
+@ExperimentalSerializationApi
 object QiitaUserService {
     operator fun invoke(): QiitaUserApi {
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
+        val contentType = "application/json".toMediaType()
+        val format = Json { ignoreUnknownKeys = true }
         val builder = Retrofit.Builder()
             .baseUrl(QiitaUserApi.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(format.asConverterFactory(contentType))
             .build()
         return builder.create(QiitaUserApi::class.java)
     }
